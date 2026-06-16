@@ -1,56 +1,48 @@
 ## Guión para presentación del póster — 10 minutos (3 personas)
 
+El póster se lee de izquierda a derecha en 3 columnas. Seguimos ese orden.
+
 ---
 
-### Persona 1 — Introducción y Marco Teórico (~3:00 min)
+### Persona 1 — Columna izquierda (~3:30 min)
 
-**[0:00 - 0:30] Título y contexto**
-Buenos días, somos Maria Fernanda, Xiomara y Michael. Presentamos nuestro proyecto "Vaciado de Tanques y Determinación del Coeficiente de Descarga", desarrollado en el Laboratorio Integrado de Física bajo la tutoría del profesor David Gómez.
+**[0:00 - 0:30] Título y presentación**
+Buenos días, somos Maria Fernanda, Xiomara y Michael. Presentamos "Vaciado de Tanques y Determinación del Coeficiente de Descarga", del Laboratorio Integrado de Física, tutoría del profesor David Gómez.
 
 **[0:30 - 1:15] Resumen y Objetivos**
-El problema que abordamos es simple de enunciar pero rico en física: ¿cuánto tarda en vaciarse un tanque por un agujero en el fondo? Estudiamos dos geometrías —un tanque rectangular y una jarra troncocónica— usando agua y aceite de cocina. Nuestro objetivo fue determinar experimentalmente el coeficiente de descarga Cd, que es el parámetro que corrige la diferencia entre la teoría ideal y el comportamiento real del fluido.
+Estudiamos el vaciado de dos geometrías —un tanque rectangular de 7×8 cm y una jarra troncocónica— usando agua y aceite de cocina. El objetivo fue determinar experimentalmente el coeficiente de descarga Cd, que corrige la diferencia entre el modelo ideal de Torricelli y el comportamiento real. Grabamos cada ensayo en video y extrajimos los datos con Tracker, obteniendo cientos de puntos de altura contra tiempo.
 
-**[1:15 - 2:30] Marco Teórico**
-La ecuación de Torricelli, derivada de Bernoulli, predice que la velocidad de salida es raíz de 2gh. Pero en la práctica el caudal real es menor por dos razones: la vena contracta —el chorro se estrecha al salir— y la fricción en el orificio. El coeficiente de descarga Cd cuantifica ambos efectos.
+**[1:15 - 2:15] Marco Teórico**
+La ecuación de Torricelli predice que la velocidad de salida es raíz de 2gh. El caudal ideal sería Ao por esa velocidad. Pero en la práctica el caudal real es menor por dos efectos: la vena contracta —el chorro se estrecha al salir del orificio— y la fricción. El coeficiente de descarga Cd recoge ambos efectos. Por conservación de masa, el caudal de salida iguala la disminución del volumen, lo que da la ecuación diferencial general: A de h por dh/dt igual a menos Cd por Ao por raíz de 2gh.
 
-**[2:30 - 3:00] Ecuación de vaciado**
-Por conservación de masa, el caudal que sale debe igualar la disminución del volumen almacenado. Esto da la ecuación diferencial: A(h) por dh/dt igual a menos Cd por Ao por raíz de 2gh. Esta ecuación se resuelve distinto según la geometría. Mi compañera les explicará cómo.
-
----
-
-### Persona 2 — Metodología y Modelado (~3:00 min)
-
-**[3:00 - 3:45] Montaje experimental**
-Trabajamos con dos recipientes reales. El tanque rectangular mide 7 por 8 centímetros de base y 25 de altura, con un orificio circular de 0.25 centímetros cuadrados. La jarra troncocónica tiene 11.3 centímetros de altura, radio en la base de 5.7 y en la boca de 6.15 centímetros, con un orificio de 5 milímetros de diámetro. Para cada montaje grabamos videos del vaciado y extrajimos los datos con Tracker, obteniendo cientos de puntos de altura contra tiempo.
-
-**[3:45 - 4:45] Solución matemática para cada geometría**
-Para el tanque rectangular, la sección es constante, así que la ecuación diferencial tiene solución explícita: h de t es igual a raíz de h0 menos k por t, todo al cuadrado. Esta fórmula permite despejar Cd directamente.
-
-Para la jarra, el área varía con la altura: el radio en función de h es r0 más alpha por h. Al integrar, la solución es implícita: obtenemos t en función de h, pero no se puede despejar h de t algebraicamente. Para graficar, evaluamos la fórmula para distintos valores de h entre 0 y h0.
-
-**[4:45 - 5:30] Cálculo del Cd**
-¿Cómo obtuvimos el Cd? Para cada punto de Tracker —un par de tiempo y altura— despejamos Cd de la fórmula correspondiente. Luego promediamos todos los valores. Pero una medición sin incertidumbre no está completa: por eso también calculamos el error asociado a cada Cd. Mi compañero les explicará ese análisis.
-
-**[5:30 - 6:00] Análisis de incertidumbre — parte conceptual**
-La incertidumbre total tiene dos fuentes. La tipo A es estadística: como tenemos entre 580 y 1200 puntos, podemos calcular la desviación estándar de todos los Cd y dividirla por raíz de N. La tipo B es instrumental: ¿qué tan bien medimos el tanque y el orificio? Usamos regla de ±1 milímetro y calibre de ±0.05 milímetros. Propagamos esos errores a través de las fórmulas de Cd para cada geometría. El resultado se combina como raíz de uA al cuadrado más uB al cuadrado. Mi compañero les mostrará los números.
+**[2:15 - 3:30] Modelado Matemático**
+Esta ecuación se resuelve distinto según la geometría. Para el tanque rectangular, el área es constante y la solución es explícita: h de t igual a raíz de h0 menos k por t, todo al cuadrado. De aquí despejamos Cd directamente. Para la jarra troncocónica, el área varía con la altura: A de h es pi por r0 más alpha por h al cuadrado. Al integrar se obtiene una solución implícita: t en función de h, que no puede invertirse. Para graficar evaluamos t para distintos valores de h. El Cd se calcula como el promedio de los valores obtenidos para cada punto experimental. La incertidumbre se reporta combinando la estadística con la propagación de errores instrumentales. Mi compañera les explicará el montaje.
 
 ---
 
-### Persona 3 — Resultados y Conclusiones (~4:00 min)
+### Persona 2 — Columna central (~3:00 min)
 
-**[6:00 - 6:45] Resultados — gráficas**
-Aquí vemos las cuatro gráficas. En cada una, la curva continua es el modelo teórico con el Cd que calculamos, y los puntos son los datos de Tracker. El ajuste es muy bueno en todos los casos: la teoría y el experimento coinciden cuando se usa el Cd correcto.
+**[3:30 - 4:15] Metodología Experimental**
+Estos son nuestros dos montajes reales. El tanque rectangular mide 7 por 8 centímetros de base, 25 de altura, con orificio circular de 0.25 centímetros cuadrados. La jarra tiene 11.3 centímetros de altura, radio en la base de 5.7, en la boca de 6.15, con orificio de 5 milímetros de diámetro. Para cada uno grabamos el vaciado con agua y con aceite, cuatro videos en total. Los datos de altura contra tiempo se extrajeron cuadro por cuadro con Tracker.
 
-**[6:45 - 7:30] Tabla de Cd y tabla de incertidumbre**
-Los valores obtenidos: para el tanque rectangular, el Cd del agua es 0.4164 y el del aceite 0.3983. Para la jarra, 0.5899 en agua y 0.4446 en aceite. Todos los Cd están por debajo del ideal de 0.62, porque nuestros orificios no son perfectos. El aceite siempre da un Cd menor que el agua por su mayor viscosidad. Y la jarra tiene un Cd más alto, indicando un mejor orificio.
+**[4:15 - 5:15] Resultados — Gráficas**
+Aquí están las cuatro gráficas. En cada una, la curva continua es el modelo teórico usando el Cd que calculamos, y los puntos azules o rojos son los datos de Tracker. Vean la coincidencia: el modelo y el experimento se alinean en todo el rango cuando se utiliza el Cd correcto. En el tanque rectangular el vaciado completo toma entre 121 y 127 segundos. En la jarra, entre 128 y 170 segundos —el aceite tarda mucho más en la jarra que en el tanque cuadrado porque la geometría variable amplifica el efecto de la viscosidad.
 
-Ahora miren la tabla de incertidumbre: en todos los casos uB —la instrumental— es diez veces mayor que uA —la estadística—. Por ejemplo, en el tanque cuadrado con agua, uA es 0.0011 pero uB es 0.0112. La incertidumbre combinada queda completamente dominada por qué tan bien medimos las dimensiones, no por cuántos datos tomamos. Dicho de otra forma: podríamos grabar el doble de video y no mejoraríamos casi nada; en cambio, un mejor calibre sí reduciría el error.
+**[5:15 - 6:30] Tabla de resultados**
+Esta tabla resume todo. Para el tanque rectangular: Cd de 0.4164 en agua y 0.3983 en aceite. Para la jarra: 0.5899 en agua y 0.4446 en aceite. Tres observaciones: todos los Cd están por debajo del valor ideal de 0.62 —nuestros orificios no son perfectos—; el aceite siempre da un Cd menor por su mayor viscosidad; y la jarra tiene un Cd más alto, lo que indica un orificio de mejor calidad. Mi compañero cerrará con el análisis de incertidumbre y las conclusiones.
 
-**[7:30 - 8:15] ¿Por qué este método y no el del volumen?**
-Alguien podría preguntarse por qué no usamos el método más simple de recolectar el volumen descargado y dividir por el tiempo. Ese método da un solo valor de Cd y asume que la altura no cambia durante la medición, lo cual es falso. Nuestro enfoque con Tracker nos da cientos de puntos por experimento, no asume altura constante y nos permite hacer estadística real. Además eliminamos una fuente de error: ya no necesitamos medir el volumen recolectado.
+---
 
-**[8:15 - 9:00] Conclusiones**
-Tres conclusiones. Una: el Cd no es un valor de libro; depende del montaje y hay que medirlo. Dos: Tracker es una herramienta muy efectiva para este tipo de experimentos. Tres: la mayor fuente de error no es estadística sino instrumental —la precisión de la regla y el calibre—. Si quisiéramos mejorar los resultados, convendría más usar instrumentos más precisos que grabar más video.
+### Persona 3 — Columna derecha (~3:30 min)
 
-**[9:00 - 10:00] Cierre y preguntas**
-En resumen, caracterizamos el coeficiente de descarga para dos geometrías y dos fluidos, validando el modelo de Torricelli cuando se incorpora el Cd experimental, y cuantificamos rigurosamente la incertidumbre asociada. Quedamos atentos a sus preguntas. Gracias.
+**[6:30 - 7:00] Cálculo de Cd desde Tracker**
+¿Cómo obtuvimos estos números? Para cada punto de Tracker —un par tiempo-altura— despejamos Cd de la fórmula de su geometría. Luego promediamos todos los valores válidos, entre 580 y 1200 por experimento. Las fórmulas de despeje están aquí en el póster y los cálculos completos en la hoja vinculada de GitHub.
+
+**[7:00 - 8:30] Análisis de Incertidumbre**
+Pero un número sin incertidumbre no está completo. Tenemos dos fuentes. La tipo A es estadística: con tantos puntos, la desviación estándar dividida por raíz de N da valores muy pequeños, del orden de 0.001. La tipo B es instrumental: ¿qué tan bien medimos las dimensiones? Usamos regla de ±1 milímetro y calibre de ±0.05 milímetros. Propagamos esos errores por las fórmulas de Cd. Vean la tabla: uB es siempre unas diez veces mayor que uA. Por ejemplo, en el tanque cuadrado con agua, uA es 0.0011 pero uB es 0.0112. La combinada queda en 0.0112, dominada completamente por lo instrumental. La enseñanza es clara: grabar el doble de video no mejoraría casi nada; en cambio, usar un calibre más preciso sí reduciría el error significativamente.
+
+**[8:30 - 9:30] Conclusiones**
+Tres conclusiones. Primero: el Cd no es un valor de libro, depende del montaje concreto y hay que medirlo. Segundo: Tracker demostró ser una herramienta muy efectiva, permitiendo cientos de puntos sin cronómetro y eliminando la necesidad de medir volumen descargado. Tercero: la incertidumbre instrumental domina completamente sobre la estadística; para mejorar los resultados conviene refinar la medición geométrica, no tomar más datos.
+
+**[9:30 - 10:00] Cierre**
+Caracterizamos el Cd para dos geometrías y dos fluidos, validamos el modelo de Torricelli con el Cd experimental, y cuantificamos rigurosamente la incertidumbre. Quedamos atentos a sus preguntas. Gracias.
