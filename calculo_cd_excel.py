@@ -366,5 +366,62 @@ ws.cell(row=row, column=6, value=f"=B{r_cd_o_j} & \" ± \" & ROUND(E{r_cd_o_j}, 
 for col in range(1, 7):
     ws.column_dimensions[get_column_letter(col)].width = 22
 
+# ============================================================
+# Hoja: Resumen (Tablas de incertidumbre y resultados)
+# ============================================================
+ws = wb.create_sheet("Resumen")
+row = 1
+SEP = ","
+
+# --- Tabla 1: Incertidumbres instrumentales ---
+ws.merge_cells(start_row=row, start_column=1, end_row=row, end_column=4)
+ws.cell(row=row, column=1, value="Tabla 1. Incertidumbres instrumentales").font = Font(bold=True, size=12)
+row += 1
+for j, hdr in enumerate(["Magnitud", "Instrumento", "Incertidumbre"], 1):
+    ws.cell(row=row, column=j, value=hdr).font = Font(bold=True)
+row += 1
+instr_data = [
+    ("Dimensiones del tanque (lados, radios)", "Regla", "±1 mm"),
+    ("Altura inicial h0", "Regla", "±1 mm"),
+    ("Diametro del orificio do", "Calibre", "±0.05 mm"),
+]
+for mag, instr, incert in instr_data:
+    ws.cell(row=row, column=1, value=mag)
+    ws.cell(row=row, column=2, value=instr)
+    ws.cell(row=row, column=3, value=incert)
+    row += 1
+
+row += 1
+
+# --- Tabla 2: Componentes de incertidumbre ---
+ws.merge_cells(start_row=row, start_column=1, end_row=row, end_column=5)
+ws.cell(row=row, column=1, value="Tabla 2. Componentes de incertidumbre del coeficiente de descarga").font = Font(bold=True, size=12)
+row += 1
+for j, hdr in enumerate(["Configuracion", "u_A (estad)", "u_B (instr)", "u_total", "Resultado final"], 1):
+    ws.cell(row=row, column=j, value=hdr).font = Font(bold=True)
+row += 1
+
+resultados = [
+    ("Cuadrado - Agua",   0.0011, 0.0112, "=SQRT(B{r}^2+C{r}^2)", 0.4164),
+    ("Cuadrado - Aceite", 0.0008, 0.0107, "=SQRT(B{r}^2+C{r}^2)", 0.3983),
+    ("Jarra - Agua",      0.0008, 0.0165, "=SQRT(B{r}^2+C{r}^2)", 0.5899),
+    ("Jarra - Aceite",    0.0009, 0.0125, "=SQRT(B{r}^2+C{r}^2)", 0.4446),
+]
+for nombre, uA, uB, formula, cd in resultados:
+    r = row
+    ws.cell(row=row, column=1, value=nombre)
+    ws.cell(row=row, column=2, value=uA)
+    ws.cell(row=row, column=3, value=uB)
+    ws.cell(row=row, column=4, value=formula.format(r=r))
+    ws.cell(row=row, column=5, value=f"={cd} & \" ± \" & ROUND(D{r},4)")
+    row += 1
+
+row += 1
+ws.cell(row=row, column=1, value="Nota: u_B domina sobre u_A en todos los casos (~2.7% vs ~0.2% relativo).").font = Font(italic=True, size=10)
+
+# Ajustar ancho
+for col in range(1, 6):
+    ws.column_dimensions[get_column_letter(col)].width = 24
+
 wb.save("calculo_cd_experimental.xlsx")
 print("Excel con valores calculados generado: calculo_cd_experimental.xlsx")

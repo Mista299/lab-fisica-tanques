@@ -519,6 +519,54 @@
               </div>
             </section>
             
+            <!-- INCERTIDUMBRE -->
+            <section class="poster-section p-3 rounded-xl shadow-sm">
+              <div class="flex items-center gap-2 mb-2 border-b pb-1 text-blue-900 border-blue-100">
+                <i class="fa-solid fa-ruler-combined text-lg"></i>
+                <h3 class="font-bold text-sm uppercase tracking-wide">Análisis de Incertidumbre</h3>
+              </div>
+              <div class="text-gray-700 text-xs space-y-2">
+
+                <p class="font-semibold text-blue-900 text-[11px] uppercase">Tipo A (estadística):</p>
+                <div class="bg-slate-50 p-2 rounded border text-center text-xs">
+                  $$u_A = \frac{\sigma}{\sqrt{N}}$$
+                </div>
+                <p class="text-[10px] text-gray-600">Donde $\sigma$ es la desviación estándar muestral de los $C_d$ calculados para cada punto y $N$ el número de puntos válidos ($580{-}1200$).</p>
+
+                <p class="font-semibold text-blue-900 text-[11px] uppercase mt-2">Tipo B (instrumental):</p>
+                <div class="bg-slate-50 p-2 rounded border text-center text-xs math-scroll">
+                  $$u_B = C_d \sqrt{\left(\frac{\Delta A_T}{A_T}\right)^2 + \left(\frac{\Delta A_o}{A_o}\right)^2 + \sum \left(\frac{\partial C_d}{\partial x_i}\frac{\Delta x_i}{C_d}\right)^2}$$
+                </div>
+                <p class="text-[10px] text-gray-600">Propagación de errores de regla ($\pm 1$ mm) y calibre ($\pm 0.05$ mm) sobre dimensiones geométricas.</p>
+
+                <p class="font-semibold text-blue-900 text-[11px] uppercase mt-2">Combinada:</p>
+                <div class="bg-slate-50 p-2 rounded border text-center text-xs">
+                  $$u_{\text{total}} = \sqrt{u_A^2 + u_B^2}$$
+                </div>
+
+                <div class="overflow-x-auto mt-2">
+                  <table class="w-full text-left border-collapse text-[10px]">
+                    <thead>
+                      <tr class="bg-indigo-900 text-white">
+                        <th class="p-1 border">Fluido</th>
+                        <th class="p-1 border">$u_A$</th>
+                        <th class="p-1 border">$u_B$</th>
+                        <th class="p-1 border">$u_{\text{total}}$</th>
+                      </tr>
+                    </thead>
+                    <tbody class="text-gray-700">
+                      <tr><td class="p-1 border font-semibold">Cuad. Agua</td><td class="p-1 border">0.0011</td><td class="p-1 border">0.0112</td><td class="p-1 border font-bold">0.0112</td></tr>
+                      <tr><td class="p-1 border font-semibold">Cuad. Aceite</td><td class="p-1 border">0.0008</td><td class="p-1 border">0.0107</td><td class="p-1 border font-bold">0.0107</td></tr>
+                      <tr><td class="p-1 border font-semibold">Jarra Agua</td><td class="p-1 border">0.0008</td><td class="p-1 border">0.0165</td><td class="p-1 border font-bold">0.0166</td></tr>
+                      <tr><td class="p-1 border font-semibold">Jarra Aceite</td><td class="p-1 border">0.0009</td><td class="p-1 border">0.0125</td><td class="p-1 border font-bold">0.0125</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p class="text-[10px] text-gray-600">La incertidumbre instrumental ($\sim 2.7\%$ relativo) domina sobre la estadística ($\sim 0.2\%$).</p>
+
+              </div>
+            </section>
+            
             <!-- CONCLUSIONES -->
             <section class="poster-section p-3 rounded-xl shadow-sm">
               <div class="flex items-center gap-2 mb-3 border-b pb-2 text-blue-900 border-blue-100">
