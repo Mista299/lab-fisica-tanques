@@ -42,7 +42,15 @@ Esta tabla resume todo. Para el tanque rectangular: Cd de 0.4164 en agua y 0.398
 Pero un número sin incertidumbre no está completo. Tenemos dos fuentes. La tipo A es estadística: con tantos puntos, la desviación estándar dividida por raíz de N da valores muy pequeños, del orden de 0.001. La tipo B es instrumental: ¿qué tan bien medimos las dimensiones? Usamos regla de ±1 milímetro y calibre de ±0.05 milímetros. Propagamos esos errores por las fórmulas de Cd. Vean la tabla: uB es siempre unas diez veces mayor que uA. Por ejemplo, en el tanque cuadrado con agua, uA es 0.0011 pero uB es 0.0112. La combinada queda en 0.0112, dominada completamente por lo instrumental. La enseñanza es clara: grabar el doble de video no mejoraría casi nada; en cambio, usar un calibre más preciso sí reduciría el error significativamente.
 
 **[8:30 - 9:30] Conclusiones**
-Tres conclusiones. Primero: el Cd no es un valor de libro, depende del montaje concreto y hay que medirlo. Segundo: Tracker demostró ser una herramienta muy efectiva, permitiendo cientos de puntos sin cronómetro y eliminando la necesidad de medir volumen descargado. Tercero: la incertidumbre instrumental domina completamente sobre la estadística; para mejorar los resultados conviene refinar la medición geométrica, no tomar más datos.
+Cuatro conclusiones, una por cada punto del póster.
+
+Primero: el Cd como parámetro de ajuste. Sin el coeficiente de descarga, el modelo de Torricelli predice vaciados que no se parecen en nada a la realidad. Todos nuestros Cd quedaron por debajo del valor ideal de 0.62, y esa diferencia es justo la que corrige las pérdidas por contracción de la vena líquida y fricción en el orificio real.
+
+Segundo: efecto de la geometría del orificio. La jarra troncocónica dio un Cd de 0.5899 en agua, muy cercano al ideal de 0.62, lo que indica que su orificio tiene bordes bien definidos. El tanque rectangular en cambio dio 0.4164, reflejando mayores pérdidas hidráulicas —su orificio no estaba tan bien fabricado.
+
+Tercero: efecto de la viscosidad. En ambas geometrías el aceite dio un Cd menor que el agua —aproximadamente 0.40 a 0.44 frente a 0.42 a 0.59—. Esto es consistente con la física: un fluido más viscoso genera más pérdidas por fricción al pasar por el orificio.
+
+Cuarto: la incertidumbre. La componente instrumental —regla de ±1 mm y calibre de ±0.05 mm— domina completamente sobre la estadística, que es del orden de 0.001. La lección práctica es que mejorar la precisión al medir las dimensiones del tanque y del orificio tendría mucho más impacto que grabar más video o tomar más datos.
 
 **[9:30 - 10:00] Cierre**
 Caracterizamos el Cd para dos geometrías y dos fluidos, validamos el modelo de Torricelli con el Cd experimental, y cuantificamos rigurosamente la incertidumbre. Quedamos atentos a sus preguntas. Gracias.
