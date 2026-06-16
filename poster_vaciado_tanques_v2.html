@@ -98,7 +98,7 @@
     }
   </style>
 </head>
-<body class="p-4 md:p-8 min-h-screen flex flex-col justify-between">
+<body class="p-2 md:p-4 flex flex-col">
 
   <!-- BARRA DE HERRAMIENTAS EDITABLES (No se imprime) -->
   <div class="no-print bg-white shadow-md rounded-xl p-4 mb-6 flex flex-wrap gap-4 items-center justify-between border border-gray-200">
@@ -134,16 +134,16 @@
   </div>
 
   <!-- CONTENEDOR PRINCIPAL DEL PÓSTER -->
-  <div class="max-w-[1600px] mx-auto w-full bg-slate-50 border-4 border-slate-300 rounded-2xl shadow-2xl p-6 md:p-10 flex flex-col justify-between space-y-8" id="poster-content">
+  <div class="max-w-[1600px] mx-auto w-full bg-slate-50 border-4 border-slate-300 rounded-2xl shadow-2xl p-4 md:p-6 flex flex-col space-y-4" id="poster-content">
     
     <!-- CABECERA DEL PÓSTER (Título, Integrantes, Tutor) -->
-    <header class="bg-gradient-to-r from-blue-900 via-indigo-950 to-slate-900 text-white p-8 rounded-xl shadow-lg relative overflow-hidden">
+    <header class="bg-gradient-to-r from-blue-900 via-indigo-950 to-slate-900 text-white p-6 rounded-xl shadow-lg relative overflow-hidden">
       <!-- Decoración abstracta de fondo -->
       <div class="absolute right-0 top-0 opacity-10 pointer-events-none transform translate-x-12 -translate-y-12">
         <i class="fa-solid fa-flask text-[250px]"></i>
       </div>
       
-      <div class="text-center space-y-4 relative z-10">
+      <div class="text-center space-y-2 relative z-10">
         <span class="bg-blue-500/30 text-blue-300 px-3 py-1 rounded-full text-xs font-semibold tracking-wider uppercase border border-blue-500/20">Proyecto de Investigación - Laboratorio Integrado de Física</span>
         <h1 id="poster-title" class="text-3xl md:text-5xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-indigo-100 uppercase" contenteditable="false">
           Vaciado de Tanques y Determinación del Coeficiente de Descarga
@@ -153,10 +153,10 @@
         </p>
 
         <!-- Divisor elegante -->
-        <div class="w-24 h-1 bg-gradient-to-r from-blue-400 to-teal-400 mx-auto my-4 rounded"></div>
+        <div class="w-24 h-1 bg-gradient-to-r from-blue-400 to-teal-400 mx-auto my-2 rounded"></div>
 
         <!-- Autores y Tutor -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 max-w-5xl mx-auto text-sm">
+         <div class="grid grid-cols-1 md:grid-cols-2 gap-2 pt-1 max-w-5xl mx-auto text-sm">
           <div class="bg-white/5 backdrop-blur-sm p-3 rounded-lg border border-white/10">
             <span class="text-xs text-blue-300 font-bold block mb-1"><i class="fa-solid fa-users mr-1"></i> INTEGRANTES</span>
             <div id="poster-authors" class="text-white font-medium" contenteditable="false">
@@ -174,13 +174,13 @@
     </header>
 
     <!-- GRID DINÁMICO DE 3 COLUMNAS PARA EL CONTENIDO -->
-    <main class="print-grid grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <main class="print-grid grid grid-cols-1 lg:grid-cols-3 gap-3">
 
       <!-- COLUMNA 1: INTRODUCCIÓN, OBJETIVOS Y MARCO TEÓRICO -->
-      <div class="space-y-6 flex flex-col justify-between">
+      <div class="space-y-2 flex flex-col">
         
         <!-- RESUMEN -->
-        <section class="poster-section p-6 rounded-xl shadow-sm flex-1">
+        <section class="poster-section p-3 rounded-xl shadow-sm">
           <div class="flex items-center gap-2 mb-3 border-b pb-2 text-blue-900 border-blue-100">
             <i class="fa-solid fa-align-left text-lg"></i>
             <h3 class="font-bold text-lg uppercase tracking-wide">Resumen</h3>
@@ -193,7 +193,7 @@
               Los resultados muestran que el $C_d$ obtenido es menor que el valor ideal de $0.62$ en todos los casos, debido a la geometría real de los orificios. El aceite presentó un $C_d$ consistentemente menor que el agua por efecto de su mayor viscosidad. Las curvas teóricas ajustadas con los $C_d$ experimentales describen con alta precisión los datos medidos en ambas geometrías.
             </p>
           </div>
-          <div class="mt-4 pt-3 border-t border-gray-100">
+          <div class="mt-1 pt-1 border-t border-gray-100">
             <span class="text-xs font-bold text-blue-800 uppercase block mb-1">Palabras Clave:</span>
             <div id="sect-keywords" class="text-xs text-gray-600 italic" contenteditable="false">
               Vaciado gravitacional, Modelo de Torricelli, Coeficiente de descarga, Vena contracta, Tracker, Propagación de incertidumbre.
@@ -202,7 +202,7 @@
         </section>
 
         <!-- OBJETIVOS -->
-        <section class="poster-section p-6 rounded-xl shadow-sm flex-1">
+        <section class="poster-section p-3 rounded-xl shadow-sm">
           <div class="flex items-center gap-2 mb-3 border-b pb-2 text-blue-900 border-blue-100">
             <i class="fa-solid fa-bullseye text-lg"></i>
             <h3 class="font-bold text-lg uppercase tracking-wide">Objetivos</h3>
@@ -215,7 +215,7 @@
         </section>
 
         <!-- MARCO TEÓRICO & FORMULACIÓN -->
-        <section class="poster-section p-6 rounded-xl shadow-sm">
+        <section class="poster-section p-3 rounded-xl shadow-sm">
           <div class="flex items-center gap-2 mb-3 border-b pb-2 text-blue-900 border-blue-100">
             <i class="fa-solid fa-calculator text-lg"></i>
             <h3 class="font-bold text-lg uppercase tracking-wide">Marco Teórico</h3>
@@ -247,7 +247,7 @@
         </section>
 
         <!-- SOLUCIÓN ANALÍTICA Y MODELADO NUMÉRICO -->
-        <section class="poster-section p-6 rounded-xl shadow-sm flex-1">
+        <section class="poster-section p-3 rounded-xl shadow-sm">
           <div class="flex items-center gap-2 mb-3 border-b pb-2 text-blue-900 border-blue-100">
             <i class="fa-solid fa-square-root-variable text-lg"></i>
             <h3 class="font-bold text-lg uppercase tracking-wide">Modelado Matemático Especial</h3>
@@ -263,7 +263,7 @@
               $$C_d = \frac{2A_T(\sqrt{h_0} - \sqrt{h})}{t\,A_o\sqrt{2g}}$$
             </div>
 
-            <p class="font-semibold text-blue-900 text-xs uppercase mt-3">B. Solución Implícita para Tronco de Cono:</p>
+            <p class="font-semibold text-blue-900 text-xs uppercase mt-1">B. Solución Implícita para Tronco de Cono:</p>
             <p class="text-xs">Con $A_T(h) = \pi(r_0 + \alpha h)^2$ y $\alpha = (R - r_0)/h_0$, la integral conduce a:</p>
               <div class="bg-slate-50 p-2 rounded border text-center font-mono my-1 text-xs text-blue-900 math-scroll">
               $$t(h) = \frac{2\pi}{C_d A_o\sqrt{2g}}\left[r_0^2(\sqrt{h_0}-\sqrt{h}) + \frac{2}{3}r_0\alpha(h_0^{3/2}-h^{3/2}) + \frac{1}{5}\alpha^2(h_0^{5/2}-h^{5/2})\right]$$
@@ -272,7 +272,7 @@
               La relación es implícita: se obtiene $t(h)$ pero no puede despejarse $h(t)$ analíticamente. Para graficar se evalúa $t$ para valores de $h$ entre $0$ y $h_0$.
             </p>
           </div>
-          <div class="mt-4 pt-3 border-t border-gray-200">
+          <div class="mt-1 pt-1 border-t border-gray-200">
             <span class="font-bold text-blue-950 block text-center mb-2 text-xs uppercase">
               <i class="fa-solid fa-calculator mr-1"></i> Determinación experimental de $C_d$
             </span>
@@ -295,10 +295,10 @@
       </div>
 
       <!-- COLUMNA 2: METODOLOGÍA, MODELADO NUMÉRICO E INFOGRAFÍA -->
-      <div class="space-y-6 flex flex-col justify-between">
+      <div class="space-y-2 flex flex-col">
         
         <!-- METODOLOGÍA Y ESQUEMA GEOMÉTRICO -->
-        <section class="poster-section p-6 rounded-xl shadow-sm flex-1">
+        <section class="poster-section p-3 rounded-xl shadow-sm">
           <div class="flex items-center gap-2 mb-3 border-b pb-2 text-blue-900 border-blue-100">
             <i class="fa-solid fa-gears text-lg"></i>
             <h3 class="font-bold text-lg uppercase tracking-wide">Metodología Experimental</h3>
@@ -372,7 +372,7 @@
             </div>
           </div>
 
-          <div class="mt-4 pt-3 border-t border-gray-100">
+          <div class="mt-1 pt-1 border-t border-gray-100">
           <span class="text-xs font-bold text-blue-900 uppercase block mb-2 text-center tracking-wide">
             <i class="fa-solid fa-video mr-1"></i> Evidencia y Registro de Muestreo
           </span>
@@ -409,7 +409,7 @@
         </div>
         </section>
  <!-- RESULTADOS Y GRÁFICAS EDITABLES -->
-        <section class="poster-section p-6 rounded-xl shadow-sm flex-1">
+        <section class="poster-section p-3 rounded-xl shadow-sm">
           <div class="flex items-center gap-2 mb-3 border-b pb-2 text-blue-900 border-blue-100">
             <i class="fa-solid fa-chart-line text-lg"></i>
             <h3 class="font-bold text-lg uppercase tracking-wide">Resultados y Análisis</h3>
@@ -476,11 +476,11 @@
       </div>
 
       <!-- COLUMNA 3: METODOLOGÍA DE CÁLCULO Y CONCLUSIONES -->
-      <div class="space-y-6 flex flex-col lg:col-span-1">
+      <div class="space-y-2 flex flex-col lg:col-span-1">
         
             <!-- METODOLOGÍA DE CÁLCULO -->
-            <section class="poster-section p-6 rounded-xl shadow-sm">
-              <div class="border-t-4 border-indigo-700 pt-3"></div>
+            <section class="poster-section p-3 rounded-xl shadow-sm">
+              <div class="border-t-2 border-indigo-700 pt-1"></div>
               <div class="flex items-center gap-2 mb-2">
                 <i class="fa-solid fa-table text-indigo-700 text-base"></i>
                 <span class="font-bold text-indigo-900 text-sm uppercase tracking-wide">Cálculo de $C_d$ a partir de datos Tracker</span>
@@ -520,7 +520,7 @@
             </section>
             
             <!-- CONCLUSIONES -->
-            <section class="poster-section p-6 rounded-xl shadow-sm">
+            <section class="poster-section p-3 rounded-xl shadow-sm">
               <div class="flex items-center gap-2 mb-3 border-b pb-2 text-blue-900 border-blue-100">
                 <i class="fa-solid fa-square-check text-lg"></i>
                 <h3 class="font-bold text-lg uppercase tracking-wide">Conclusiones</h3>
