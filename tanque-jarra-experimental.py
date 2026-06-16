@@ -86,6 +86,25 @@ t_aceite_teo, h_aceite_teo, t_end_aceite = modelo_teorico(Cd_aceite)
 
 print(f"Tiempo de vaciado teórico (agua):   {t_end_agua:.1f} s")
 print(f"Tiempo de vaciado teórico (aceite): {t_end_aceite:.1f} s")
+print()
+
+# -----------------------------
+# Tabla de evolución del cálculo t(h) para agua
+# -----------------------------
+print("Evolucion del calculo t(h) para agua (20 pasos):")
+print(f"  Geometria: Rb={R_bottom}, Rt={R_top}, h0={h0}, alpha={alpha:.6f}")
+print(f"  Cd = {Cd_agua:.4f}, A0 = {A0:.6e}")
+print(f"  Formula: t(h) = (2*pi/(Cd*A0*sqrt(2g))) * f(h)")
+print()
+print(f"  {'h (m)':>10}  {'f(h)':>12}  {'t(h) (s)':>10}")
+print(f"  {'-'*10}  {'-'*12}  {'-'*10}")
+const_agua = 2 * np.pi / (Cd_agua * A0 * np.sqrt(2 * g))
+h_demo = np.linspace(h0, 0.0, 21)
+for h in h_demo:
+    f = f_integral(h)
+    t = const_agua * f
+    print(f"  {h:10.4f}  {f:12.6f}  {t:10.1f}")
+print()
 
 # -----------------------------
 # Gráficas (subplots lado a lado)
