@@ -104,7 +104,7 @@ ax1.axvline(t_end_agua, linestyle='--', color='gray', label=f"t vaciado ≈ {t_e
 ax1.legend()
 
 # --- Aceite ---
-ax2.plot(t_aceite_teo, h_aceite_teo, linewidth=2, color='darkorange', label=f'Modelo teórico (Cd={Cd_aceite:.2f})')
+ax2.plot(t_aceite_teo, h_aceite_teo, linewidth=2, color='lime', label=f'Modelo teórico (Cd={Cd_aceite:.2f})')
 ax2.scatter(t_aceite, y_aceite, color='red', s=8, alpha=0.7, label='Datos experimentales')
 ax2.set_title("Aceite de cocina")
 ax2.set_xlabel("Tiempo (s)")

@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Póster Científico - Vaciado de Tanques</title>
+  
+  <!-- Tailwind CSS para el diseño responsive y moderno -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- FontAwesome para iconos limpios -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Chart.js para recrear con exactitud editable las gráficas del artículo -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- Configuración e Importación de MathJax para renderizar fórmulas de LaTeX perfectamente -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    /* Estilos personalizados para el póster científico */
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap');
+    
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: #f3f4f6;
+    }
+    
+    h1, h2, h3, h4 {
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .poster-section {
+      background: white;
+      border-top: 5px solid #1e3a8a; /* Deep Navy Blue typical of Academic Posters */
+      transition: all 0.3s ease;
+    }
+
+    .poster-section:hover {
+      box-shadow: 0 10px 15px -3px rgba(30, 58, 138, 0.1), 0 4px 6px -2px rgba(30, 58, 138, 0.05);
+    }
+
+    /* Fórmulas: scroll horizontal si desbordan */
+    .poster-section {
+      overflow-x: auto;
+    }
+
+    .math-scroll {
+      overflow-x: auto;
+      max-width: 100%;
+    }
+
+    /* Estilos especiales para el modo de edición interactivo */
+    [contenteditable="true"] {
+      outline: 2px dashed #3b82f6;
+      background-color: #eff6ff;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+
+    [contenteditable="true"]:focus {
+      outline: 2px solid #2563eb;
+      background-color: #dbeafe;
+    }
+
+    /* Ajustes específicos para impresión (Optimización tamaño A0/A1 o PDF) */
+    @media print {
+      body {
+        background-color: white;
+        font-size: 12px;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .print-grid {
+        display: grid !important;
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: 1rem !important;
+      }
+      .poster-section {
+        box-shadow: none !important;
+        border: 1px solid #e5e7eb !important;
+        border-top: 5px solid #1e3a8a !important;
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body class="p-4 md:p-8 min-h-screen flex flex-col justify-between">
+
+  <!-- BARRA DE HERRAMIENTAS EDITABLES (No se imprime) -->
+  <div class="no-print bg-white shadow-md rounded-xl p-4 mb-6 flex flex-wrap gap-4 items-center justify-between border border-gray-200">
+    <div class="flex items-center gap-3">
+      <div class="bg-blue-100 p-2 rounded-lg text-blue-600">
+        <i class="fa-solid fa-wand-magic-sparkles text-xl"></i>
+      </div>
+      <div>
+        <h2 class="font-bold text-gray-800 text-lg">Panel de Control del Póster</h2>
+        <p class="text-xs text-gray-500">Puedes editar cualquier texto directamente activando el modo edición.</p>
+      </div>
+    </div>
+    
+    <div class="flex flex-wrap gap-2">
+      <!-- Botón para habilitar edición -->
+      <button id="btn-edit" onclick="toggleEditMode()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg flex items-center gap-2 shadow transition-all">
+        <i class="fa-solid fa-pen-to-square"></i>
+        <span id="edit-text">Activar Edición Libre</span>
+      </button>
+
+      <!-- Botón para actualizar gráficas/fórmulas tras edición -->
+      <button onclick="reRenderMath()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg flex items-center gap-2 shadow transition-all">
+        <i class="fa-solid fa-arrows-rotate"></i>
+        <span>Procesar LaTeX</span>
+      </button>
+
+      <!-- Botón de guardar/imprimir -->
+      <button onclick="window.print()" class="px-4 py-2 bg-gray-800 hover:bg-gray-900 text-white font-semibold rounded-lg flex items-center gap-2 shadow transition-all">
+        <i class="fa-solid fa-file-pdf"></i>
+        <span>Imprimir / Guardar PDF</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- CONTENEDOR PRINCIPAL DEL PÓSTER -->
+  <div class="max-w-[1600px] mx-auto w-full bg-slate-50 border-4 border-slate-300 rounded-2xl shadow-2xl p-6 md:p-10 flex flex-col justify-between space-y-8" id="poster-content">
+    
+    <!-- CABECERA DEL PÓSTER (Título, Integrantes, Tutor) -->
+    <header class="bg-gradient-to-r from-blue-900 via-indigo-950 to-slate-900 text-white p-8 rounded-xl shadow-lg relative overflow-hidden">
+      <!-- Decoración abstracta de fondo -->
+      <div class="absolute right-0 top-0 opacity-10 pointer-events-none transform translate-x-12 -translate-y-12">
+        <i class="fa-solid fa-flask text-[250px]"></i>
+      </div>
+      
+      <div class="text-center space-y-4 relative z-10">
+        <span class="bg-blue-500/30 text-blue-300 px-3 py-1 rounded-full text-xs font-semibold tracking-wider uppercase border border-blue-500/20">Proyecto de Investigación - Laboratorio Integrado de Física</span>
+        <h1 id="poster-title" class="text-3xl md:text-5xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-indigo-100 uppercase" contenteditable="false">
+          Vaciado de Tanques y Determinación del Coeficiente de Descarga
+        </h1>
+        <p id="poster-subtitle" class="text-base md:text-xl text-blue-200 font-medium italic max-w-4xl mx-auto" contenteditable="false">
+          Estudio experimental con tanque rectangular y jarra troncocónica, empleando agua y aceite de cocina mediante análisis de video con Tracker
+        </p>
+
+        <!-- Divisor elegante -->
+        <div class="w-24 h-1 bg-gradient-to-r from-blue-400 to-teal-400 mx-auto my-4 rounded"></div>
+
+        <!-- Autores y Tutor -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 max-w-5xl mx-auto text-sm">
+          <div class="bg-white/5 backdrop-blur-sm p-3 rounded-lg border border-white/10">
+            <span class="text-xs text-blue-300 font-bold block mb-1"><i class="fa-solid fa-users mr-1"></i> INTEGRANTES</span>
+            <div id="poster-authors" class="text-white font-medium" contenteditable="false">
+              Maria Fernanda Atencia Oliva &bull; Xiomara Betancur Isaza &bull; Michael Stiven Tabares Tobón
+            </div>
+          </div>
+          <div class="bg-white/5 backdrop-blur-sm p-3 rounded-lg border border-white/10">
+            <span class="text-xs text-blue-300 font-bold block mb-1"><i class="fa-solid fa-chalkboard-user mr-1"></i> TUTOR ACADÉMICO</span>
+            <div id="poster-tutor" class="text-white font-medium" contenteditable="false">
+              David Sebastian Gómez Perez
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- GRID DINÁMICO DE 3 COLUMNAS PARA EL CONTENIDO -->
+    <main class="print-grid grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+      <!-- COLUMNA 1: INTRODUCCIÓN, OBJETIVOS Y MARCO TEÓRICO -->
+      <div class="space-y-6 flex flex-col justify-between">
+        
+        <!-- RESUMEN -->
+        <section class="poster-section p-6 rounded-xl shadow-sm flex-1">
+          <div class="flex items-center gap-2 mb-3 border-b pb-2 text-blue-900 border-blue-100">
+            <i class="fa-solid fa-align-left text-lg"></i>
+            <h3 class="font-bold text-lg uppercase tracking-wide">Resumen</h3>
+          </div>
+          <div id="sect-resumen" class="text-gray-700 text-sm leading-relaxed text-justify space-y-3" contenteditable="false">
+            <p>
+              Este proyecto analiza el vaciado gravitacional de dos geometrías: un <strong>tanque rectangular</strong> de sección constante (7×8 cm) y una <strong>jarra troncocónica</strong> (radios 5.7 y 6.15 cm, altura 11.3 cm). Empleando agua y aceite de cocina como fluidos de trabajo, se determinó el coeficiente de descarga $C_d$ ajustando el modelo teórico a los datos de altura $h(t)$ registrados con el software Tracker.
+            </p>
+            <p>
+              Los resultados muestran que el $C_d$ obtenido es menor que el valor ideal de $0.62$ en todos los casos, debido a la geometría real de los orificios. El aceite presentó un $C_d$ consistentemente menor que el agua por efecto de su mayor viscosidad. Las curvas teóricas ajustadas con los $C_d$ experimentales describen con alta precisión los datos medidos en ambas geometrías.
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-gray-100">
+            <span class="text-xs font-bold text-blue-800 uppercase block mb-1">Palabras Clave:</span>
+            <div id="sect-keywords" class="text-xs text-gray-600 italic" contenteditable="false">
+              Vaciado gravitacional, Modelo de Torricelli, Coeficiente de descarga, Vena contracta, Tracker, Propagación de incertidumbre.
+            </div>
+          </div>
+        </section>
+
+        <!-- OBJETIVOS -->
+        <section class="poster-section p-6 rounded-xl shadow-sm flex-1">
+          <div class="flex items-center gap-2 mb-3 border-b pb-2 text-blue-900 border-blue-100">
+            <i class="fa-solid fa-bullseye text-lg"></i>
+            <h3 class="font-bold text-lg uppercase tracking-wide">Objetivos</h3>
+          </div>
+          <ul id="sect-objetivos" class="list-disc list-inside text-gray-700 text-sm space-y-2 leading-relaxed" contenteditable="false">
+            <li>Determinar experimentalmente el coeficiente de descarga $C_d$ para dos geometrías de tanque mediante el ajuste del modelo teórico a datos de altura vs. tiempo obtenidos con Tracker.</li>
+            <li>Comparar el comportamiento del $C_d$ para agua y aceite de cocina, evaluando el efecto de la viscosidad sobre la dinámica de vaciado.</li>
+            <li>Cuantificar la incertidumbre combinada (estadística e instrumental) del $C_d$ mediante propagación de errores.</li>
+          </ul>
+        </section>
+
+        <!-- MARCO TEÓRICO & FORMULACIÓN -->
+        <section class="poster-section p-6 rounded-xl shadow-sm">
+          <div class="flex items-center gap-2 mb-3 border-b pb-2 text-blue-900 border-blue-100">
+            <i class="fa-solid fa-calculator text-lg"></i>
+            <h3 class="font-bold text-lg uppercase tracking-wide">Marco Teórico</h3>
+          </div>
+          <div id="sect-teoria" class="text-gray-700 text-sm space-y-4" contenteditable="false">
+            <div>
+              <span class="font-semibold text-blue-900 block mb-1 text-xs uppercase">1. Ecuación de Torricelli (Velocidad ideal):</span>
+              <p class="text-xs text-gray-600 mb-2">Derivada del teorema de Bernoulli entre la superficie libre y la sección de salida:</p>
+              <div class="bg-slate-50 p-2 rounded border text-center font-mono my-1 text-sm text-blue-900">
+                $$v = \sqrt{2gh}$$
+              </div>
+            </div>
+
+            <div>
+              <span class="font-semibold text-blue-900 block mb-1 text-xs uppercase">2. Caudal Experimental e Influencia del $C_d$:</span>
+              <p class="text-xs text-gray-600 mb-2">Para contrarrestar la reducción del área efectiva (vena contracta) y la fricción:</p>
+              <div class="bg-slate-50 p-2 rounded border text-center font-mono my-1 text-sm text-blue-900">
+                $$Q_{exp} = C_d A_o \sqrt{2gh}$$
+              </div>
+            </div>
+
+            <div>
+              <span class="font-semibold text-blue-900 block mb-1 text-xs uppercase">3. Ecuación Diferencial General de Vaciado:</span>
+              <div class="bg-slate-50 p-2 rounded border text-center font-mono my-1 text-sm text-blue-900">
+                $$A(h)\frac{dh}{dt} = -C_d A_o \sqrt{2gh}$$
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SOLUCIÓN ANALÍTICA Y MODELADO NUMÉRICO -->
+        <section class="poster-section p-6 rounded-xl shadow-sm flex-1">
+          <div class="flex items-center gap-2 mb-3 border-b pb-2 text-blue-900 border-blue-100">
+            <i class="fa-solid fa-square-root-variable text-lg"></i>
+            <h3 class="font-bold text-lg uppercase tracking-wide">Modelado Matemático Especial</h3>
+          </div>
+          <div id="sect-modelado" class="text-gray-700 text-sm space-y-3 leading-relaxed" contenteditable="false">
+            <p class="font-semibold text-blue-900 text-xs uppercase">A. Solución Analítica para Tanque Rectangular:</p>
+            <p class="text-xs">Al integrar la ecuación diferencial con sección transversal constante $A_T$ se obtiene:</p>
+            <div class="bg-slate-50 p-2 rounded border text-center font-mono my-1 text-sm text-blue-900">
+              $$h(t) = \left( \sqrt{h_0} - \frac{C_d A_o \sqrt{2g}}{2 A_T} t \right)^2$$
+            </div>
+            <p class="text-xs">Invirtiendo para despejar $C_d$ desde los datos experimentales:</p>
+            <div class="bg-slate-50 p-2 rounded border text-center font-mono my-1 text-sm text-blue-900">
+              $$C_d = \frac{2A_T(\sqrt{h_0} - \sqrt{h})}{t\,A_o\sqrt{2g}}$$
+            </div>
+
+            <p class="font-semibold text-blue-900 text-xs uppercase mt-3">B. Solución Implícita para Tronco de Cono:</p>
+            <p class="text-xs">Con $A_T(h) = \pi(r_0 + \alpha h)^2$ y $\alpha = (R - r_0)/h_0$, la integral conduce a:</p>
+              <div class="bg-slate-50 p-2 rounded border text-center font-mono my-1 text-xs text-blue-900 math-scroll">
+              $$t(h) = \frac{2\pi}{C_d A_o\sqrt{2g}}\left[r_0^2(\sqrt{h_0}-\sqrt{h}) + \frac{2}{3}r_0\alpha(h_0^{3/2}-h^{3/2}) + \frac{1}{5}\alpha^2(h_0^{5/2}-h^{5/2})\right]$$
+            </div>
+            <p class="text-xs text-gray-600">
+              La relación es implícita: se obtiene $t(h)$ pero no puede despejarse $h(t)$ analíticamente. Para graficar se evalúa $t$ para valores de $h$ entre $0$ y $h_0$.
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-gray-200">
+            <span class="font-bold text-blue-950 block text-center mb-2 text-xs uppercase">
+              <i class="fa-solid fa-calculator mr-1"></i> Determinación experimental de $C_d$
+            </span>
+            
+            <div class="space-y-3">
+              <p class="text-[11px] text-gray-600">
+                Para cada punto $(t_i, h_i)$ registrado con Tracker se despeja $C_d$ de la fórmula correspondiente a cada geometría. El valor final se reporta como el promedio $\overline{C_d}$ de todos los puntos, con incertidumbre combinada:
+              </p>
+              <div class="bg-slate-50 p-2 rounded border text-center font-mono my-1 text-xs text-blue-900">
+                $$\overline{C_d} = \frac{1}{N}\sum_{i=1}^{N} C_{d,i} \quad \pm \quad \sqrt{u_{\text{estad}}^2 + u_{\text{instr}}^2}$$
+              </div>
+              <p class="text-[11px] text-gray-600">
+                La incertidumbre estadística es $\sigma/\sqrt{N}$ (tipo A). La instrumental (tipo B) se obtiene por propagación de los errores de medición de $A_T$, $A_o$ y $h_0$ (regla $\pm 1$ mm, calibre $\pm 0.05$ mm).
+              </p>
+            </div>
+          </div>
+          
+        </section>
+
+      </div>
+
+      <!-- COLUMNA 2: METODOLOGÍA, MODELADO NUMÉRICO E INFOGRAFÍA -->
+      <div class="space-y-6 flex flex-col justify-between">
+        
+        <!-- METODOLOGÍA Y ESQUEMA GEOMÉTRICO -->
+        <section class="poster-section p-6 rounded-xl shadow-sm flex-1">
+          <div class="flex items-center gap-2 mb-3 border-b pb-2 text-blue-900 border-blue-100">
+            <i class="fa-solid fa-gears text-lg"></i>
+            <h3 class="font-bold text-lg uppercase tracking-wide">Metodología Experimental</h3>
+          </div>
+          
+          <div class="space-y-4">
+            <!-- Tabla de Parámetros -->
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr class="bg-blue-550 bg-blue-900 text-white">
+                    <th class="p-2 rounded-tl border">Recipiente</th>
+                    <th class="p-2 border">Dimensiones</th>
+                    <th class="p-2 border">Altura $h_0$</th>
+                    <th class="p-2 rounded-tr border">Orificio</th>
+                  </tr>
+                </thead>
+                <tbody class="text-gray-700" id="sect-metodo-tabla" contenteditable="false">
+                  <tr class="hover:bg-gray-50">
+                    <td class="p-2 border font-semibold">Troncocónico (jarra)</td>
+                    <td class="p-2 border">$R=6.15\text{ cm}$, $r_0=5.7\text{ cm}$</td>
+                    <td class="p-2 border">$11.3\text{ cm}$</td>
+                    <td class="p-2 border">Circular ($d=5\text{ mm}$)</td>
+                  </tr>
+                  <tr class="hover:bg-gray-50">
+                    <td class="p-2 border font-semibold">Rectangular</td>
+                    <td class="p-2 border">$7 \times 8\text{ cm}$ cte.</td>
+                    <td class="p-2 border">$25.0\text{ cm}$</td>
+                    <td class="p-2 border">Circular ($A_o = 0.25\text{ cm}^2$)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- SVG Representación Dinámica de los Sistemas -->
+            <div class="bg-slate-50 p-3 rounded-lg border border-slate-200">
+              <span class="text-xs font-bold text-blue-900 block mb-2 text-center uppercase"><i class="fa-solid fa-vial mr-1"></i> Diagrama de Montaje y Geometrías</span>
+              <div class="flex justify-around items-end h-32 py-2">
+                <!-- Cono Invertido -->
+                <div class="flex flex-col items-center">
+                  <svg class="w-24 h-24" viewBox="0 0 100 100">
+                    <!-- Geometría del cono -->
+                    <polygon points="10,20 90,20 60,80 40,80" fill="#93c5fd" fill-opacity="0.6" stroke="#1e3a8a" stroke-width="2"/>
+                    <!-- Nivel de fluido -->
+                    <polygon points="20,40 80,40 60,80 40,80" fill="#3b82f6" fill-opacity="0.5" />
+                    <!-- Orificio -->
+                    <circle cx="50" cy="81" r="3" fill="#ef4444"/>
+                    <!-- Texto de soporte -->
+                    <text x="50" y="15" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">R = 6.15 cm</text>
+                    <text x="50" y="93" font-size="9" font-family="sans-serif" text-anchor="middle">Orificio Circular</text>
+                  </svg>
+                  <span class="text-[10px] text-gray-500 mt-1 font-bold">Tanque 1 (Cónico)</span>
+                </div>
+                
+                <!-- Rectangular -->
+                <div class="flex flex-col items-center">
+                  <svg class="w-24 h-24" viewBox="0 0 100 100">
+                    <!-- Geometría rectangular -->
+                    <rect x="25" y="20" width="50" height="60" fill="#93c5fd" fill-opacity="0.6" stroke="#1e3a8a" stroke-width="2"/>
+                    <!-- Nivel fluido -->
+                    <rect x="25" y="45" width="50" height="35" fill="#3b82f6" fill-opacity="0.5" />
+                    <!-- Orificio circular -->
+                    <circle cx="50" cy="81" r="3" fill="#ef4444"/>
+                    <!-- Texto de soporte -->
+                    <text x="50" y="15" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">7x8 cm Cte.</text>
+                    <text x="50" y="93" font-size="9" font-family="sans-serif" text-anchor="middle">Orificio Circular</text>
+                  </svg>
+                  <span class="text-[10px] text-gray-500 mt-1 font-bold">Tanque 2 (Rectangular)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-gray-100">
+          <span class="text-xs font-bold text-blue-900 uppercase block mb-2 text-center tracking-wide">
+            <i class="fa-solid fa-video mr-1"></i> Evidencia y Registro de Muestreo
+          </span>
+          
+          <p class="text-[11px] text-gray-600 text-center mb-3">
+            Accede al registro audiovisual en Google Drive utilizado para la toma de muestras y cronometraje:
+          </p>
+
+          <div class="grid grid-cols-2 gap-3">
+            <a href="https://drive.google.com/file/d/1KqIH4AwovXkxMZvmJId5-hK8Q5Pw_Dr8/view?usp=sharing" 
+              target="_blank" 
+              class="flex flex-col items-center justify-center p-3 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 rounded-lg text-center transition-all group">
+              <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mb-1 group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-play text-xs pl-0.5"></i>
+              </div>
+              <span class="text-[11px] font-bold text-slate-800 block">Recipiente Cuadrado</span>
+              <span class="text-[9px] text-blue-600 font-medium underline mt-0.5 flex items-center gap-1">
+                Ver Video <i class="fa-solid fa-arrow-up-right-from-square text-[8px]"></i>
+              </span>
+            </a>
+
+            <a href="https://drive.google.com/file/d/1WMIELWhs9IzafPAhVL1j1T0JBsqBeDj1/view?usp=sharing" 
+              target="_blank" 
+              class="flex flex-col items-center justify-center p-3 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 rounded-lg text-center transition-all group">
+              <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center mb-1 group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-play text-xs pl-0.5"></i>
+              </div>
+              <span class="text-[11px] font-bold text-slate-800 block">Recipiente Circular</span>
+              <span class="text-[9px] text-indigo-600 font-medium underline mt-0.5 flex items-center gap-1">
+                Ver Video <i class="fa-solid fa-arrow-up-right-from-square text-[8px]"></i>
+              </span>
+            </a>
+          </div>
+        </div>
+        </section>
+ <!-- RESULTADOS Y GRÁFICAS EDITABLES -->
+        <section class="poster-section p-6 rounded-xl shadow-sm flex-1">
+          <div class="flex items-center gap-2 mb-3 border-b pb-2 text-blue-900 border-blue-100">
+            <i class="fa-solid fa-chart-line text-lg"></i>
+            <h3 class="font-bold text-lg uppercase tracking-wide">Resultados y Análisis</h3>
+          </div>
+          
+          <div class="space-y-4 text-xs">
+            <!-- Resultado 1: Tanque Rectangular - Agua -->
+            <div class="bg-slate-50 p-3 rounded-lg border border-slate-200">
+              <span class="font-bold text-blue-950 block text-center mb-1 text-[11px] uppercase"><i class="fa-solid fa-chart-simple mr-1"></i> Vaciado Tanque Rectangular - Agua</span>
+              <img src="diagrams/cuadrado_agua.png" alt="Vaciado tanque cuadrado agua" class="w-full h-auto rounded shadow-md mx-auto mt-2">
+            </div>
+            <div class="bg-slate-50 p-3 rounded-lg border border-slate-200">
+              <span class="font-bold text-blue-950 block text-center mb-1 text-[11px] uppercase"><i class="fa-solid fa-chart-simple mr-1"></i> Vaciado Tanque Rectangular - Aceite</span>
+              <img src="diagrams/cuadrado_aceite.png" alt="Vaciado tanque cuadrado aceite" class="w-full h-auto rounded shadow-md mx-auto mt-2">
+            </div>
+
+            <!-- Resultado 2: Tanque Troncocónico -->
+            <div class="bg-slate-50 p-3 rounded-lg border border-slate-200">
+              <span class="font-bold text-blue-950 block text-center mb-1 text-[11px] uppercase"><i class="fa-solid fa-chart-simple mr-1"></i> Vaciado Jarra Troncocónica - Agua</span>
+              <img src="diagrams/jarra_agua.png" alt="Vaciado jarra agua" class="w-full h-auto rounded shadow-md mx-auto mt-2">
+            </div>
+            <div class="bg-slate-50 p-3 rounded-lg border border-slate-200">
+              <span class="font-bold text-blue-950 block text-center mb-1 text-[11px] uppercase"><i class="fa-solid fa-chart-simple mr-1"></i> Vaciado Jarra Troncocónica - Aceite</span>
+              <img src="diagrams/jarra_aceite.png" alt="Vaciado jarra aceite" class="w-full h-auto rounded shadow-md mx-auto mt-2">
+            </div>
+
+            <!-- Tabla de Coeficientes Obtenidos -->
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="bg-indigo-900 text-white font-semibold">
+                    <th class="p-2 border rounded-tl">Parámetro</th>
+                    <th class="p-2 border">Tanque Rectangular</th>
+                    <th class="p-2 border rounded-tr">Jarra Troncocónica</th>
+                  </tr>
+                </thead>
+                <tbody class="text-gray-700 font-medium" id="sect-coef-tabla" contenteditable="false">
+                  <tr class="hover:bg-gray-50">
+                    <td class="p-2 border font-bold bg-gray-50">$C_d$ Agua</td>
+                    <td class="p-2 border text-blue-700 font-extrabold">$0.4164 \pm 0.0112$</td>
+                    <td class="p-2 border text-emerald-700 font-extrabold">$0.5899 \pm 0.0166$</td>
+                  </tr>
+                  <tr class="hover:bg-gray-50">
+                    <td class="p-2 border font-bold bg-gray-50">$C_d$ Aceite</td>
+                    <td class="p-2 border text-red-700 font-extrabold">$0.3983 \pm 0.0107$</td>
+                    <td class="p-2 border text-amber-700 font-extrabold">$0.4446 \pm 0.0125$</td>
+                  </tr>
+                  <tr class="hover:bg-gray-50">
+                    <td class="p-2 border font-bold bg-gray-50">$t_v$ Agua</td>
+                    <td class="p-2 border">$121.4\text{ s}$</td>
+                    <td class="p-2 border">$128.4\text{ s}$</td>
+                  </tr>
+                  <tr class="hover:bg-gray-50">
+                    <td class="p-2 border font-bold bg-gray-50">$t_v$ Aceite</td>
+                    <td class="p-2 border">$127.0\text{ s}$</td>
+                    <td class="p-2 border">$170.3\text{ s}$</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+        </section>
+
+
+      </div>
+
+      <!-- COLUMNA 3: METODOLOGÍA DE CÁLCULO Y CONCLUSIONES -->
+      <div class="space-y-6 flex flex-col lg:col-span-1">
+        
+            <!-- METODOLOGÍA DE CÁLCULO -->
+            <section class="poster-section p-6 rounded-xl shadow-sm">
+              <div class="border-t-4 border-indigo-700 pt-3"></div>
+              <div class="flex items-center gap-2 mb-2">
+                <i class="fa-solid fa-table text-indigo-700 text-base"></i>
+                <span class="font-bold text-indigo-900 text-sm uppercase tracking-wide">Cálculo de $C_d$ a partir de datos Tracker</span>
+              </div>
+              <div id="sect-calculo" class="space-y-3" contenteditable="false">
+
+                <p class="text-gray-600 text-xs leading-relaxed">
+                  Para cada punto $(t_i, h_i)$ registrado con Tracker se despejó $C_d$ de la fórmula correspondiente a cada geometría. El valor final se obtuvo como el promedio de todos los $C_{d,i}$ válidos ($N \approx 580{-}1200$ puntos por experimento).
+                </p>
+
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 space-y-2">
+                  <p class="text-[11px] font-bold text-blue-900 uppercase">Tanque rectangular:</p>
+                  <div class="bg-white p-2 rounded border text-center text-blue-900 text-xs">
+                    $$C_d = \frac{2A_T(\sqrt{h_0} - \sqrt{h})}{t\,A_o\sqrt{2g}}$$
+                  </div>
+                </div>
+
+                <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-3 space-y-2">
+                  <p class="text-[11px] font-bold text-emerald-900 uppercase">Jarra troncocónica:</p>
+                  <div class="bg-white p-2 rounded border text-center text-emerald-900 text-xs math-scroll">
+                    $$C_d = \frac{2\pi}{t A_o\sqrt{2g}}\left[r_0^2(\sqrt{h_0}-\sqrt{h}) + \frac{2}{3}r_0\alpha(h_0^{3/2}-h^{3/2}) + \frac{1}{5}\alpha^2(h_0^{5/2}-h^{5/2})\right]$$
+                  </div>
+                </div>
+
+                <p class="text-gray-600 text-xs leading-relaxed">
+                  Hoja de cálculo completa con todos los puntos, estadísticas y análisis de incertidumbre:
+                </p>
+                <div class="text-center">
+                  <a href="https://github.com/Mista299/lab-fisica-tanques/blob/main/calculo_cd_experimental.xlsx" 
+                     target="_blank" 
+                     class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg text-xs transition-all">
+                    <i class="fa-solid fa-table"></i> Abrir hoja de cálculo (GitHub)
+                  </a>
+                </div>
+
+              </div>
+            </section>
+            
+            <!-- CONCLUSIONES -->
+            <section class="poster-section p-6 rounded-xl shadow-sm">
+              <div class="flex items-center gap-2 mb-3 border-b pb-2 text-blue-900 border-blue-100">
+                <i class="fa-solid fa-square-check text-lg"></i>
+                <h3 class="font-bold text-lg uppercase tracking-wide">Conclusiones</h3>
+              </div>
+              <div id="sect-conclusiones" class="text-gray-700 text-xs leading-relaxed space-y-2 text-justify" contenteditable="false">
+      
+              <div id="sect-conclusion-errores" class="text-gray-700 text-xs leading-relaxed text-justify space-y-2" contenteditable="false">
+                <p>
+                  &bull; <strong>El $C_d$ como parámetro de ajuste:</strong> Sin el coeficiente de descarga, el modelo de Torricelli predice vaciados irreales. Los $C_d$ obtenidos (todos $< 0.62$) corrigen las pérdidas por contracción de la vena líquida y fricción en el orificio real.
+                </p>
+                <p>
+                  &bull; <strong>Efecto de la geometría del orificio:</strong> La jarra troncocónica presentó un $C_d = 0.5899$ (agua), cercano al ideal de $0.62$, indicando un orificio con bordes bien definidos. El tanque rectangular mostró un $C_d = 0.4164$, reflejando mayores pérdidas hidráulicas en su orificio.
+                </p>
+                <p>
+                  &bull; <strong>Efecto de la viscosidad:</strong> En ambas geometrías, el aceite de cocina ($C_d \approx 0.40-0.44$) presentó un coeficiente menor que el agua ($C_d \approx 0.42-0.59$), consistente con el aumento de pérdidas por fricción en fluidos más viscosos.
+                </p>
+                <p>
+                  &bull; <strong>Incertidumbre:</strong> La componente instrumental (regla $\pm 1$ mm, calibre $\pm 0.05$ mm) domina sobre la estadística ($\sigma/\sqrt{N} \sim 0.001$). Mejorar la precisión dimensional del montaje tendría mayor impacto que aumentar el número de datos.
+                </p>
+              </div>
+          </section>
+
+      </div>
+
+    </main>
+
+    <!-- PIE DE PÁGINA DEL PÓSTER (Afiliaciones y Referencias) -->
+    <footer class="bg-slate-900 text-slate-300 p-4 rounded-lg flex flex-col md:flex-row justify-between items-center text-[10px] gap-3">
+      <div class="text-center md:text-left space-y-1">
+        <p class="font-semibold text-white">Laboratorio Integrado de Física</p>
+        <p class="text-slate-400">Universidad de Antioquia - Facultad de Ingeniería</p>
+      </div>
+      <div class="text-center md:text-right text-slate-400">
+        <p><strong>Referencias Clave:</strong> Munson et al. (2013) <em>Fluid Mechanics 7th Ed.</em> | White, F. (2016) <em>Fluid Mechanics 8th Ed.</em></p>
+      </div>
+    </footer>
+
+  </div>
+
+  <script>
+    let editMode = false;
+
+    // Función para activar/desactivar el modo edición en vivo del póster
+    function toggleEditMode() {
+      editMode = !editMode;
+      const editableIds = [
+        'poster-title', 'poster-subtitle', 'poster-authors', 'poster-tutor',
+        'sect-resumen', 'sect-keywords', 'sect-objetivos', 'sect-teoria',
+        'sect-metodo-tabla', 'sect-modelado', 'sect-coef-tabla', 'sect-calculo', 'sect-conclusiones'
+      ];
+
+      editableIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.setAttribute('contenteditable', editMode ? 'true' : 'false');
+        }
+      });
+
+      const btn = document.getElementById('btn-edit');
+      const text = document.getElementById('edit-text');
+      if (editMode) {
+        btn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+        btn.classList.add('bg-amber-500', 'hover:bg-amber-600');
+        text.innerText = 'Desactivar Edición';
+      } else {
+        btn.classList.remove('bg-amber-500', 'hover:bg-amber-600');
+        btn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+        text.innerText = 'Activar Edición Libre';
+        reRenderMath();
+      }
+    }
+
+    function reRenderMath() {
+      if (window.MathJax) {
+        MathJax.typesetPromise();
+      }
+    }
+  </script>
+</body>
+</html>
